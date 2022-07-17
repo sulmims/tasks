@@ -1,3 +1,5 @@
+package service;
+
 public class Size {
     private int width;
     private int height;
@@ -7,13 +9,10 @@ public class Size {
         this.height = height;
     }
 
-
     public int getWidth() {
         return width;
     }
-
     public int getHeight() {
         return height;
     }
-
 }

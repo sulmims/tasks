@@ -1,3 +1,5 @@
+package service.counter;
+
 public class LetterSource{
     private static final String LETTERS = "ABCDE";
     private int letterNumber;
