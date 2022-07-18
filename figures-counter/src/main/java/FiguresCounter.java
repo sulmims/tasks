@@ -1,26 +1,33 @@
 import service.counter.FiguresCounterService;
 import service.counter.FiguresMap;
 import service.counter.InvalidInputException;
+import service.counter.RollingLetterSource;
+import service.neighbour.NeighbourService;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import java.lang.System.Logger;
+import java.lang.System.Logger.Level;
 
 public class FiguresCounter {
 
     private static final String FIGURES_MAP_FILE_NAME = "/home/compliance/development/tasks/figures-counter/build/resources/main/figures_map.txt";
 
+    private static final Logger logger = System.getLogger(FiguresCounter.class.getName());
+
     public static void main(String[] args) {
         try {
             FiguresMap figuresMap = createFiguresMap();
-            int figuresCount = FiguresCounterService.countFigures(figuresMap);
-            System.out.println(String.format("FiguresCount : %s", figuresCount));
+            FiguresCounterService figuresCounterService = new FiguresCounterService(new NeighbourService(), new RollingLetterSource());
+            int figuresCount = figuresCounterService.countFigures(figuresMap);
+            logger.log(Level.INFO, String.format("FiguresCount : %s", figuresCount));
             printFiguresMap(figuresMap);
         }catch(InvalidInputException e){
-            System.out.println(String.format("ERROR : %s", e.getMessage()));
+            logger.log(Level.ERROR, String.format("ERROR : %s", e.getMessage()));
         }catch(IOException e){
-            System.out.println(String.format("ERROR : %s", e.toString()));
+            logger.log(Level.ERROR, String.format("ERROR : %s", e.toString()));
         }
     }
 
@@ -30,7 +37,7 @@ public class FiguresCounter {
             for (int x = 0; x < figuresMap.getWidth(); x++) {
                 line += (char) figuresMap.getFiguresMapData()[y][x];
             }
-            System.out.println(line);
+            logger.log(Level.DEBUG, line);
         }
     }
 
